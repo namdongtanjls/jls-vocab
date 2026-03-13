@@ -284,14 +284,16 @@ const wordBtn = document.getElementById("wordBtn");
 
 let meaningHidden = false;
 let wordHidden = false;
+let isSpeaking = false;
+let speakTimer = null;
 
 function escapeHtml(text){
   return text
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#39;");
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
 
 function renderCards(){
@@ -306,24 +308,69 @@ function renderCards(){
         <div class="left">
           <div class="num">${i + 1}.</div>
           <div class="text-box">
-            <div class="word"${wordHidden ? ' style="visibility:hidden;"' : ""}>${escapeHtml(word)}</div>
-            <div class="meaning"${meaningHidden ? ' style="display:none;"' : ""}>${escapeHtml(meaning)}</div>
+            <div class="word" style="${wordHidden ? 'visibility:hidden;' : 'visibility:visible;'}">${escapeHtml(word)}</div>
+            <div class="meaning" style="${meaningHidden ? 'display:none;' : 'display:block;'}">${escapeHtml(meaning)}</div>
           </div>
         </div>
-        <button type="button" class="speak-btn" onclick="speakWord(${JSON.stringify(word)})">🔊</button>
+        <button type="button" class="speak-btn" data-word="${escapeHtml(word)}">🔊</button>
       </div>
     `;
   });
 
   grid.innerHTML = html;
+
+  document.querySelectorAll(".speak-btn").forEach(btn => {
+    btn.addEventListener("click", function(e){
+      e.preventDefault();
+      e.stopPropagation();
+
+      const word = this.getAttribute("data-word");
+      speakWord(word);
+    });
+  });
 }
 
 function speakWord(word){
-  const u = new SpeechSynthesisUtterance(word);
-  u.lang = "en-US";
-  u.rate = 0.9;
-  window.speechSynthesis.cancel();
-  window.speechSynthesis.speak(u);
+  if (!("speechSynthesis" in window)) {
+    alert("이 브라우저에서는 음성 기능을 지원하지 않습니다.");
+    return;
+  }
+
+  if (speakTimer) {
+    clearTimeout(speakTimer);
+    speakTimer = null;
+  }
+
+  try {
+    window.speechSynthesis.cancel();
+  } catch (e) {}
+
+  isSpeaking = false;
+
+  const utterance = new SpeechSynthesisUtterance(word);
+  utterance.lang = "en-US";
+  utterance.rate = 1;
+  utterance.pitch = 1;
+  utterance.volume = 1;
+
+  utterance.onstart = function(){
+    isSpeaking = true;
+  };
+
+  utterance.onend = function(){
+    isSpeaking = false;
+  };
+
+  utterance.onerror = function(){
+    isSpeaking = false;
+  };
+
+  speakTimer = setTimeout(function(){
+    if (!isSpeaking) {
+      window.speechSynthesis.speak(utterance);
+    }
+    speakTimer = null;
+  }, 80);
 }
 
 meaningBtn.addEventListener("click", function(){
