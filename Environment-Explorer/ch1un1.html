@@ -236,36 +236,36 @@ h2{
 
 <script>
 const vocabList = [
-["economy","경기, 경제"],
-["quality","질"],
-["convert","전환시키다"],
-["absorb","흡수하다"],
-["excess","지나침, 과잉"],
-["affect","영향을 미치다"],
-["atmosphere","대기, 공기"],
-["temperature","온도"],
-["amphibian","양서류"],
-["anxiety","불안, 염려"],
-["naturally","자연스럽게"],
-["process","과정"],
-["pollutant","오염 물질"],
-["wildlife","야생 동물"],
-["source","원천, 근원"],
-["photosynthesis","광합성"],
-["oxygen","산소"],
-["habitat","서식지"],
-["evergreen","상록의"],
-["drill","구멍을 뚫다"],
-["eventually","결국"],
-["limb","나뭇가지"],
-["ingredient","재료"],
-["shady","그늘이 드리워진"],
-["carbon dioxide","이산화탄소"],
-["root","뿌리"],
-["supply","공급"],
-["trail","오솔길"],
-["medicinal","약효가 있는"],
-["material","재료"]
+  ["economy","경기, 경제"],
+  ["quality","질"],
+  ["convert","전환시키다"],
+  ["absorb","흡수하다"],
+  ["excess","지나침, 과잉"],
+  ["affect","영향을 미치다"],
+  ["atmosphere","대기, 공기"],
+  ["temperature","온도"],
+  ["amphibian","양서류"],
+  ["anxiety","불안, 염려"],
+  ["naturally","자연스럽게"],
+  ["process","과정"],
+  ["pollutant","오염 물질"],
+  ["wildlife","야생 동물"],
+  ["source","원천, 근원"],
+  ["photosynthesis","광합성"],
+  ["oxygen","산소"],
+  ["habitat","서식지"],
+  ["evergreen","상록의"],
+  ["drill","구멍을 뚫다"],
+  ["eventually","결국"],
+  ["limb","나뭇가지"],
+  ["ingredient","재료"],
+  ["shady","그늘이 드리워진"],
+  ["carbon dioxide","이산화탄소"],
+  ["root","뿌리"],
+  ["supply","공급"],
+  ["trail","오솔길"],
+  ["medicinal","약효가 있는"],
+  ["material","재료"]
 ];
 
 const grid = document.getElementById("grid");
@@ -277,11 +277,11 @@ let wordHidden = false;
 
 function escapeHtml(text){
   return text
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#39;");
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
 
 function renderCards(){
@@ -296,24 +296,41 @@ function renderCards(){
         <div class="left">
           <div class="num">${i + 1}.</div>
           <div class="text-box">
-            <div class="word"${wordHidden ? ' style="visibility:hidden;"' : ""}>${escapeHtml(word)}</div>
-            <div class="meaning"${meaningHidden ? ' style="display:none;"' : ""}>${escapeHtml(meaning)}</div>
+            <div class="word" style="${wordHidden ? 'visibility:hidden;' : 'visibility:visible;'}">${escapeHtml(word)}</div>
+            <div class="meaning" style="${meaningHidden ? 'display:none;' : 'display:block;'}">${escapeHtml(meaning)}</div>
           </div>
         </div>
-        <button type="button" class="speak-btn" onclick="speakWord(${JSON.stringify(word)})">🔊</button>
+        <button type="button" class="speak-btn" data-word="${escapeHtml(word)}">🔊</button>
       </div>
     `;
   });
 
   grid.innerHTML = html;
+
+  document.querySelectorAll(".speak-btn").forEach(btn => {
+    btn.addEventListener("click", function(){
+      const word = this.getAttribute("data-word");
+      speakWord(word);
+    });
+  });
 }
 
 function speakWord(word){
-  const u = new SpeechSynthesisUtterance(word);
-  u.lang = "en-US";
-  u.rate = 0.9;
-  window.speechSynthesis.cancel();
-  window.speechSynthesis.speak(u);
+  if (!("speechSynthesis" in window)) {
+    alert("이 브라우저에서는 음성 기능을 지원하지 않습니다.");
+    return;
+  }
+
+  window.speechSynthesis.pause();
+  window.speechSynthesis.resume();
+
+  const utterance = new SpeechSynthesisUtterance(word);
+  utterance.lang = "en-US";
+  utterance.rate = 1;
+  utterance.pitch = 1;
+  utterance.volume = 1;
+
+  window.speechSynthesis.speak(utterance);
 }
 
 meaningBtn.addEventListener("click", function(){
