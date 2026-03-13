@@ -3,239 +3,150 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JLS Vocabulary</title>
+<title>JLS 활용독해 단어장</title>
 
 <style>
-*{
-  box-sizing:border-box;
-}
 
 body{
-  font-family:Arial,sans-serif;
-  background:#f5f6fa;
-  margin:0;
-  padding:24px;
-  color:#111;
-}
-
-.wrap{
-  max-width:1400px;
-  margin:0 auto;
+font-family:Arial;
+background:#f5f6fa;
+padding:20px;
+margin:0;
 }
 
 h1{
-  margin:0 0 8px 0;
-  font-size:30px;
-}
-
-.desc{
-  margin:0 0 20px 0;
-  color:#666;
-  font-size:15px;
-  line-height:1.5;
+margin-top:0;
 }
 
 .search-box{
-  position:sticky;
-  top:0;
-  z-index:50;
-  background:#f5f6fa;
-  padding:0 0 16px 0;
-  margin-bottom:8px;
+margin-bottom:20px;
 }
 
-.search{
-  width:100%;
-  padding:14px 16px;
-  border:1px solid #dcdfe6;
-  border-radius:14px;
-  font-size:15px;
-  outline:none;
-  background:#fff;
-  box-shadow:0 4px 14px rgba(0,0,0,0.04);
-}
-
-.search:focus{
-  border-color:#b9c4d6;
+.search-box input{
+width:100%;
+padding:12px;
+border-radius:10px;
+border:1px solid #d9d9d9;
+font-size:14px;
 }
 
 .grid{
-  display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:18px;
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:16px;
+}
+
+/* 태블릿 */
+
+@media (max-width:1024px){
+.grid{
+grid-template-columns:repeat(3,1fr);
+}
+}
+
+/* 모바일 */
+
+@media (max-width:600px){
+.grid{
+grid-template-columns:repeat(3,1fr);
+}
 }
 
 .card{
-  display:block;
-  text-decoration:none;
-  color:#111;
-  background:#fff;
-  border:1px solid #e2e2e2;
-  border-radius:18px;
-  padding:12px;
-  box-shadow:0 4px 14px rgba(0,0,0,0.05);
-  transition:transform 0.15s ease, box-shadow 0.15s ease;
+background:white;
+border-radius:16px;
+padding:12px;
+border:1px solid #e3e3e3;
+text-decoration:none;
+color:black;
+display:block;
 }
 
-.card:hover{
-  transform:translateY(-2px);
-  box-shadow:0 8px 20px rgba(0,0,0,0.08);
-}
-
-.thumb{
-  width:100%;
-  aspect-ratio:3 / 4;
-  object-fit:cover;
-  border-radius:14px;
-  display:block;
-  background:#eceff4;
+.card img{
+width:100%;
+border-radius:12px;
+margin-bottom:10px;
 }
 
 .title{
-  margin-top:10px;
-  font-size:15px;
-  line-height:1.4;
-  font-weight:700;
-  word-break:keep-all;
+font-size:14px;
+font-weight:bold;
+line-height:1.4;
 }
 
-.no-result{
-  display:none;
-  margin-top:18px;
-  padding:20px;
-  text-align:center;
-  background:#fff;
-  border:1px solid #e2e2e2;
-  border-radius:16px;
-  color:#666;
-  font-size:15px;
-}
-
-/* 태블릿 정도 */
-@media (max-width:900px){
-  .grid{
-    grid-template-columns:repeat(3,minmax(0,1fr));
-  }
-}
-
-/* 일반 모바일 */
-@media (max-width:600px){
-  body{
-    padding:18px;
-  }
-
-  h1{
-    font-size:26px;
-  }
-
-  .grid{
-    grid-template-columns:repeat(4,minmax(0,1fr));
-    gap:12px;
-  }
-
-  .card{
-    padding:10px;
-    border-radius:16px;
-  }
-
-  .title{
-    font-size:13px;
-  }
-}
-
-/* 갤럭시 S25(360px)보다 작은 화면 */
-@media (max-width:359px){
-  .grid{
-    grid-template-columns:repeat(3,minmax(0,1fr));
-  }
-}
 </style>
 </head>
+
 <body>
 
-<div class="wrap">
-  <h1>JLS Vocabulary</h1>
-  <p class="desc">교재를 눌러 챕터 목록으로 이동하세요.</p>
+<h1>Vocabulary Books</h1>
 
-  <div class="search-box">
-    <input
-      type="text"
-      id="searchInput"
-      class="search"
-      placeholder="교재 검색 (예: money, explorer, charity)"
-      oninput="filterBooks()"
-    >
-  </div>
+<div class="search-box">
+<input type="text" id="search" placeholder="교재 검색 (예: money)">
+</div>
 
-  <div class="grid" id="bookGrid">
+<div class="grid" id="grid">
 
-    <a class="card" href="money_charity_foundation.html" data-title="Money & Charity Foundation">
-      <img class="thumb" src="money_charity_foundation.jpg" alt="Money & Charity Foundation">
-      <div class="title">Money & Charity Foundation</div>
-    </a>
+<a class="card" data-name="environment expert" href="./Environment-Expert/index.html">
+<img src="environment-expert.jpg">
+<div class="title">Environment Expert</div>
+</a>
 
-    <a class="card" href="environment_explorer.html" data-title="Environment Explorer">
-      <img class="thumb" src="environment_explorer.jpg" alt="Environment Explorer">
-      <div class="title">Environment Explorer</div>
-    </a>
+<a class="card" data-name="environment explorer" href="./Environment-Explorer/index.html">
+<img src="Environment-Explorer.jpg">
+<div class="title">Environment Explorer</div>
+</a>
 
-    <a class="card" href="science_discovery.html" data-title="Science Discovery">
-      <img class="thumb" src="science_discovery.jpg" alt="Science Discovery">
-      <div class="title">Science Discovery</div>
-    </a>
+<a class="card" data-name="global affairs explorer" href="./Global-Affairs-Explorer/index.html">
+<img src="Global-Affairs-Explorer.jpg">
+<div class="title">Global Affairs Explorer</div>
+</a>
 
-    <a class="card" href="history_adventure.html" data-title="History Adventure">
-      <img class="thumb" src="history_adventure.jpg" alt="History Adventure">
-      <div class="title">History Adventure</div>
-    </a>
+<a class="card" data-name="money charity foundation" href="./Money-Charity-Foundation/index.html">
+<img src="Money-Charity-Foundation.png">
+<div class="title">Money & Charity Foundation</div>
+</a>
 
-    <a class="card" href="art_and_culture.html" data-title="Art and Culture">
-      <img class="thumb" src="art_and_culture.jpg" alt="Art and Culture">
-      <div class="title">Art and Culture</div>
-    </a>
+<a class="card" data-name="pollution environmental technology foundation" href="./Pollution-Environmental-Technology-Foundation/index.html">
+<img src="Pollution-Environmental-Technology-Foundation.png">
+<div class="title">Pollution Environmental Technology Foundation</div>
+</a>
 
-    <a class="card" href="reading_master.html" data-title="Reading Master">
-      <img class="thumb" src="reading_master.jpg" alt="Reading Master">
-      <div class="title">Reading Master</div>
-    </a>
+<a class="card" data-name="social issue explorer" href="./Social-Issue-Explorer/index.html">
+<img src="Social-Issues-Explorer.jpg">
+<div class="title">Social Issue Explorer</div>
+</a>
 
-    <a class="card" href="grammar_build_up.html" data-title="Grammar Build Up">
-      <img class="thumb" src="grammar_build_up.jpg" alt="Grammar Build Up">
-      <div class="title">Grammar Build Up</div>
-    </a>
+<a class="card" data-name="art architecture foundation" href="./art-architecture-foundation/index.html">
+<img src="Art-Architecture-Foundation.png">
+<div class="title">Art Architecture Foundation</div>
+</a>
 
-    <a class="card" href="world_topics.html" data-title="World Topics">
-      <img class="thumb" src="world_topics.jpg" alt="World Topics">
-      <div class="title">World Topics</div>
-    </a>
-
-  </div>
-
-  <div class="no-result" id="noResult">
-    검색 결과가 없습니다.
-  </div>
 </div>
 
 <script>
-function filterBooks(){
-  const input = document.getElementById('searchInput').value.toLowerCase().trim();
-  const cards = document.querySelectorAll('#bookGrid .card');
-  const noResult = document.getElementById('noResult');
-  let visibleCount = 0;
 
-  cards.forEach(card => {
-    const title = card.dataset.title.toLowerCase();
+const search = document.getElementById("search");
+const cards = document.querySelectorAll(".card");
 
-    if(title.includes(input)){
-      card.style.display = 'block';
-      visibleCount++;
-    }else{
-      card.style.display = 'none';
-    }
-  });
+search.addEventListener("input", function(){
 
-  noResult.style.display = visibleCount === 0 ? 'block' : 'none';
+let value = this.value.toLowerCase();
+
+cards.forEach(card=>{
+
+let name = card.dataset.name;
+
+if(name.includes(value)){
+card.style.display="block";
+}else{
+card.style.display="none";
 }
+
+});
+
+});
+
 </script>
 
 </body>
